@@ -1,5 +1,5 @@
 ## How to run server OpenLdap with PHPldapadmin
-  ### 1 - Clone repitory
+  ### 1 - Clone repository
   ### 2 - Install Docker (https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/ubuntu/#set-up-the-repository)
   ### 3 - Run script.sh
 ```console
