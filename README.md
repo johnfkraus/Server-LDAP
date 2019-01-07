@@ -22,6 +22,8 @@ Login DN: cn=admin,dc=example,dc=org
 Password: admin
 ```
   ### 5 - Go to PHPldapAdmin
+  ![screenshot from 2019-01-06 12-35-48](https://user-images.githubusercontent.com/12220181/50763854-280eee80-1258-11e9-9cc6-6696bda5fb24.png)
+  
     url: https://172.17.0.3
     login: cn=admin,dc=example,dc=org
     password: admin
