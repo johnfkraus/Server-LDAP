@@ -27,3 +27,9 @@ Password: admin
     url: https://172.17.0.3
     login: cn=admin,dc=example,dc=org
     password: admin
+
+### 6 - Get IP from OpenLDAP
+```bash
+docker inspect -f '{{ .NetworkSettings.IPAddress }}' ldap-service
+127.17.0.3
+```
