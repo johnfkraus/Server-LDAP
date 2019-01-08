@@ -67,6 +67,7 @@ AUTH_LDAP_CACHE_TIMEOUT = 3600
 # superuser.
 AUTHENTICATION_BACKENDS = [
     'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 #Adding logger to LDAP server
@@ -74,3 +75,22 @@ logger = logging.getLogger('django_auth_ldap')
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.DEBUG)
 ```
+
+### 9 - Create group from users
+(Generic: Posix Group)
+![screenshot from 2019-01-08 12-20-47](https://user-images.githubusercontent.com/12220181/50836440-5b2cad00-1340-11e9-83d4-77203f25f17e.png) 
+![screenshot from 2019-01-08 12-21-24](https://user-images.githubusercontent.com/12220181/50836441-5b2cad00-1340-11e9-9aab-72cbcaafedaa.png)
+
+### 10 - Create user
+(Generic: User Account)
+![screenshot from 2019-01-08 12-20-47](https://user-images.githubusercontent.com/12220181/50836440-5b2cad00-1340-11e9-83d4-77203f25f17e.png) 
+![screenshot from 2019-01-08 12-22-05](https://user-images.githubusercontent.com/12220181/50836442-5bc54380-1340-11e9-82d8-79d60f1a3278.png)
+
+
+### 11 - Create super user from Django
+```bash
+python manage.py createsuperuser
+```
+### 12 - Loggin in Django admin
+Log with user create in phpLDAPadmin
+http://127.0.0.1:8000/admin/
