@@ -33,3 +33,44 @@ Password: admin
 docker inspect -f '{{ .NetworkSettings.IPAddress }}' ldap-service
 127.17.0.3
 ```
+### 7 - Create Django project and install libs
+```bash
+django-admin startproject autenticationLdap
+pip install django-auth-ldap
+```
+
+### 8 - Configure Django to authenticate OpenLDAP
+Edit settings.py
+```python
+AUTH_LDAP_SERVER_URI = 'ldap://172.17.0.2' #IP from LDAP server
+
+AUTH_LDAP_BIND_DN = 'cn=admin,dc=example,dc=org' # Distinguished Name from Admin
+AUTH_LDAP_BIND_PASSWORD = 'admin' # Password from Admin
+AUTH_LDAP_USER_SEARCH = LDAPSearch( # Path to find users 
+    'dc=example,dc=org',
+    ldap.SCOPE_SUBTREE,
+    '(uid=%(user)s)',
+)
+AUTH_LDAP_START_TLS = False
+
+# This is the default, but I like to be explicit.
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+# Use LDAP group membership to calculate group permissions.
+AUTH_LDAP_FIND_GROUP_PERMS = True
+
+# Cache distinguised names and group memberships for an hour to minimize
+# LDAP traffic.
+AUTH_LDAP_CACHE_TIMEOUT = 3600
+
+# Keep ModelBackend around for per-user permissions and maybe a local
+# superuser.
+AUTHENTICATION_BACKENDS = [
+    'django_auth_ldap.backend.LDAPBackend',
+]
+
+#Adding logger to LDAP server
+logger = logging.getLogger('django_auth_ldap')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
+```
