@@ -1,0 +1,3 @@
+"dn","dc","o","objectclass"
+"dc=example,dc=org","example","Example Inc.","top | dcObject | organization"
+
