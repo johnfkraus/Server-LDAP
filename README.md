@@ -149,9 +149,250 @@ Exec into ldap server:
 
 docker exec -it ldap-service bash
 
-ldapsearch -x -z 200 -b 'dc=example,dc=org' -s sub -v '(uid=davis)'
+Use password and bind DN.
+Use -w password and -D '
 
-ldapsearch -x -z 200 -b 'dc=example,dc=org' -s sub -v 'objectClass=*'
+
+ldapsearch -x -D 'cn=admin,dc=example,dc=org' -z 200 -b 'dc=example,dc=org' -s sub -w password -v '(uid=davis)'
+
+ldapsearch -x -D 'cn=admin,dc=example,dc=org' -z 200 -b 'dc=example,dc=org' -s sub -w password -v 'objectclass=*'
+
+
+ldapsearch -x \
+  -D "cn=admin,dc=example,dc=org" \
+  -w password \
+  -v \
+  -b "dc=example,dc=org" \
+  -s sub "(uid=*)"
+
+
+
+
+
+
+
+
+## Lesson   LDAP Schemas
+
+In ldap host
+
+ldapsearch -Q -LLL -Y EXTERNAL 
+
+
+## LDAP User Authentication Setup
+
+Set up user auth in Ubuntu Linux
+
+Spin up Ubuntu Linux server in the cloud.
+password: bananab
+
+sudo apt-get update
+
+sudo apt-get install libpam-ldap nscd
+
+
+Configuring ldap-auth-config
+----------------------------
+
+Please enter the URI of the LDAP server to use. This is a string in the form of
+ldap://<hostname or IP>:<port>/. ldaps:// or ldapi:// can also be used. The port number is
+optional.
+
+Note: It is usually a good idea to use an IP address because it reduces risks of failure in the
+event name service problems.
+
+LDAP server Uniform Resource Identifier:
+
+LDAP server Uniform Resource Identifier: ldap://172.17.0.2
+
+
+Please enter the distinguished name of the LDAP search base. Many sites use the components of
+their domain names for this purpose. For example, the domain "example.net" would use
+"dc=example,dc=net" as the distinguished name of the search base.
+
+Distinguished name of the search base:
+
+dc=example,dc=org
+
+Please enter which version of the LDAP protocol should be used by ldapns. It is usually a good
+idea to set this to the highest available version.
+
+  1. 3  2. 2
+LDAP version to use: 1
+
+
+This option will allow you to make password utilities that use pam to behave like you would be
+changing local passwords.
+
+The password will be stored in a separate file which will be made readable to root only.
+
+If you are using NFS mounted /etc or any other custom setup, you should disable this.
+
+Make local root Database admin: [yes/no] yes
+
+
+
+Choose this option if you are required to login to the database to retrieve entries.
+
+Note: Under a normal setup, this is not needed.
+
+Does the LDAP database require login? [yes/no]  no
+
+
+
+This account will be used when root changes a password.
+
+Note: This account has to be a privileged account.
+
+LDAP account for root:  cn=admin,dc=example,dc=org
+
+Please enter the password to use when ldap-auth-config tries to login to the LDAP directory
+using the LDAP account for root.
+
+The password will be stored in a separate file /etc/ldap.secret which will be made readable to
+root only.
+
+Entering an empty password will re-use the old password.
+
+LDAP root account password: password
+
+
+The PAM module can set the password crypt locally when changing the passwords, which is usually
+a good choice. Specifying something other than clear ensures that the password gets crypted in
+some way.
+
+The meanings for selections are:
+
+clear - Don't set any encryptions. This is useful with servers that automatically encrypt
+userPassword entry.
+
+crypt - (Default) make userPassword use the same format as the flat filesystem. This will work
+for most configurations.
+
+nds - Use Novell Directory Services-style updating by first removing the old password and then
+update with a cleartext password.
+
+ad - Active Directory-style. Create a Unicode password and update the unicodePwd attribute.
+
+exop - Use the OpenLDAP password change extended operation to update the password.
+[More]
+
+
+
+md5 - Use the stronger md5 algorithm instead of standard crypt.
+
+  1. clear  2. crypt  3. nds  4. ad  5. exop  6. md5
+Local crypt to use when changing passwords: 1
+
+
+
+
+
+to do over:
+
+sudo dpkg-reconfigure ldap-auth-config
+
+
+apt-get install nscd
+
+Continuing in the ubuntu container:
+
+vim /etc/nsswitch.conf
+
+```
+# /etc/nsswitch.conf
+#
+# Example configuration of GNU Name Service Switch functionality.
+# If you have the `glibc-doc-reference' and `info' packages installed, try:
+# `info libc "Name Service Switch"' for information about this file.
+
+passwd:         files systemd
+group:          files systemd
+shadow:         files
+gshadow:        files
+
+hosts:          files dns
+networks:       files
+
+protocols:      db files
+services:       db files
+ethers:         db files
+rpc:            db files
+
+netgroup:       nis
+"nsswitch.conf" 20L, 510B
+```
+CHANGE three lines as follows:
+passwd:         ldap files systemd
+group:          ldap files systemd
+shadow:         ldap files
+
+
+Want to automatically create a home directory when a user logs in:
+
+vim /etc/pam.d/common-session
+
+```
+
+# /etc/pam.d/common-session - session-related modules common to all services
+#
+# This file is included from other service-specific PAM config files,
+# and should contain a list of modules that define tasks to be performed
+# at the start and end of interactive sessions.
+#
+# As of pam 1.0.1-6, this file is managed by pam-auth-update by default.
+# To take advantage of this, it is recommended that you configure any
+# local modules either before or after the default block, and use
+# pam-auth-update to manage selection of other modules.  See
+# pam-auth-update(8) for details.
+
+# here are the per-package modules (the "Primary" block)
+session [default=1]                     pam_permit.so
+# here's the fallback if no module succeeds
+session requisite                       pam_deny.so
+# prime the stack with a positive return value if there isn't one already;
+# this avoids us returning an error just because nothing sets a success code
+# since the modules above will each just jump around
+session required                        pam_permit.so
+# The pam_umask module will set the umask according to the system default in
+# /etc/login.defs and user settings, solving the problem of different
+# umask settings with different shells, display managers, remote sessions etc.
+# See "man pam_umask".
+session optional                        pam_umask.so
+# and here are more per-package modules (the "Additional" block)
+session required        pam_unix.so
+session optional                        pam_ldap.so
+session optional        pam_systemd.so
+# end of pam-auth-update config
+
+```
+at the end of the file add:
+
+session required  pam_mkhomedir.so skel=/etc/skel umask=0022
+
+Restart the service so our config changes will take effect:
+
+sudo /etc/init.d/nscd restart
+
+If you logged in using public key instead of password, you must enable password authentication before you proceed.
+
+Set the password:
+
+sudo passwd
+
+Make sure PasswordAuthentication yes is set in the file:
+sudo vim /etc/ssh/sshd_config
+
+If you changed sshd_config, you have to restart ssh as root.
+
+```
+sudo -s
+/etc/init.d/ssh restart
+```
+
+Find user steve password using Apache Directory Studio
+
+it is: steveldap
 
 
 
