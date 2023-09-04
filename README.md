@@ -117,6 +117,42 @@ cp ou.xml o.xml
 
 etc.
 
+## Lesson 16 - Apache2 Directory Studio
+
+No need to install templates, as with PLA.
+
+Must be installed on your machine.
+
+Two perspectives:
+
+LDAP
+
+Schema Editor
+
+
+
+
+
+Apache2 Directory studio LDAP result code 21 - invalidAttributeSyntax objectClass: posixAccount value #1 invalid per syntax posixAccount
+
+
+
+ 	
+Could not determine the root of your LDAP tree.
+It appears that the LDAP server has been configured to not reveal its root.
+Please specify it in config.php
+
+
+## Lesson 19 Command Line tools
+
+Exec into ldap server:
+
+docker exec -it ldap-service bash
+
+ldapsearch -x -z 200 -b 'dc=example,dc=org' -s sub -v '(uid=davis)'
+
+ldapsearch -x -z 200 -b 'dc=example,dc=org' -s sub -v 'objectClass=*'
+
 
 
 

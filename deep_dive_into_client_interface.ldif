@@ -1,0 +1,59 @@
+dn: uid=john,ou=people,o=yyy,c=uk,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: posixAccount	
+uid: john
+sn: Doe
+givenName: John
+cn: John Doe
+displayName: John Doe
+uidNumber: 10000
+gidNumber: 5000
+userPassword: johnldap
+gecos: John Doe
+loginShell: /bin/bash
+homeDirectory: /home/john
+
+dn: uid=davis,ou=people,o=yyy,c=uk,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: posixAccount	
+uid: davis
+sn: Doe
+givenName: Davis
+cn: Davis Doe
+displayName: Davis Doe
+uidNumber: 10001
+gidNumber: 5001
+userPassword: Davisldap
+gecos: DavisDoe
+loginShell: /bin/bash
+homeDirectory: /home/davis
+
+dn: uid=Joe,ou=people,o=xxx,c=us,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: posixAccount	
+uid: Joe
+sn: Jo
+givenName: Joe
+cn: John j
+displayName: John j
+uidNumber: 10003
+gidNumber: 5003
+userPassword: joeldap
+gecos: Joej
+loginShell: /bin/bash
+homeDirectory: /home/joe
+
+dn: uid=steve,ou=people,o=xxx,c=us,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: posixAccount	
+uid: steve
+sn: steve
+givenName: steve j
+cn: steve j
+displayName: steve
+uidNumber: 10004
+gidNumber: 5004
+userPassword: steveldap
+gecos: stevej
+loginShell: /bin/bash
+homeDirectory: /home/steve

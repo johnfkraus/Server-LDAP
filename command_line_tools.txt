@@ -1,0 +1,25 @@
+*********LDIF statements to add 4 entities under group***********
+
+dn: cn=dev,ou=group,o=xxx,c=us,dc=yourhostname,dc=com
+cu: dev
+gidnumber: 5003
+memberuid:joe
+objectclass: posixGroup
+
+dn: cn=sysadmin,ou=group,o=xxx,c=us,dc=yourhostname,dc=com
+cn: sysadmin
+gidnumber: 5004
+memberuid:steve
+objectclass: posixGroup
+
+dn: cn=dev,ou=group,o=yyy,c=uk,dc=yourhostname,dc=com
+cn: dev
+gidnumber: 5000
+memberuid:john
+objectclass: posixGroup
+
+dn: cn=sysadmin,ou=group,o=yyy,c=uk,dc=yourhostname,dc=com
+cn: sysadmin
+gidnumber: 5001
+memberuid:davis
+objectclass: posixGroup

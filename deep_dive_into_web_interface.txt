@@ -1,0 +1,9 @@
+*********LDIF statements to add 2 OU entities(group)***********
+
+dn: ou=group,o=yyy,c=uk,dc=yourhostname,dc=com
+ou: group
+objectclass: organizationalUnit
+
+dn: ou=group,o=xxx,c=us,dc=yourhostname,dc=com
+ou: group
+objectclass: organizationalUnit

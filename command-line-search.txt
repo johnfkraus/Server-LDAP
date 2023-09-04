@@ -1,0 +1,17 @@
+LDAP command line tools 								
+									
+									
+command to search for an entity									
+
+sudo ldapsearch -x -z 200 -b 'dc=example,dc=org' -s sub -v '(uid=davis)'			
+
+ldapsearch -x -z 200 -b 'dc=example,dc=org' -s sub -v '(uid=davis)'
+
+command to search for entities with OR operator									
+sudo ldapsearch -x -z 200 -b 'dc=example,dc=org' -s sub -v '(|(uid=sara) (uid=davis))'									
+									
+command to add entities using ldapadd									
+ldapadd -x -W -D 'cn=admin,dc=hostname,dc=org' -f ldif_file_name.ldif									
+									
+command to delete entities using ldapdelete									
+ldapdelete -x -W -D "cn=admin,dc=hostname,dc=org" "uid=davis,ou=people,o=yyy,c=uk,dc=hostname,dc=org"									
