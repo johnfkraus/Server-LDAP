@@ -1,42 +1,129 @@
-## How to run server OpenLdap with PHPldapadmin
-### 1 - Clone repository
-  
-### 2 - Install Docker (https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/ubuntu/#set-up-the-repository)
-  
-### 3 - Run script.sh
-```console
-chmode -x start.sh 
-bash -x start.sh
+# openldap-pla
+
+## Run openldap and phpldapadmin in Docker
+
+Install Docker
+
+Clone this repository
+
+chmod -x run.sh
+
+./run.sh
+
+Login (pre-populated) cn=admin,dc=example,dc=org
+
+Password: password
+
+Install and start Apache Directory studio on local machine.
+
+Create new LDAP Connection
+
+Host: localhost
+
+cn=admin,dc=example,dc=org
+
+LESSON 15, Deep dive into web interface
+
+Exec into phpldapadmin container
+
+docker exec -it phpldapadmin-service  bash
+
+To edit files:
+```
+apt-get update
+apt-get install apt-file
+apt-file update
+apt-get install vim     
+OR
+apt-get update && apt-get install apt-file -y && apt-file update && apt-get install vim -y
 ```
 
-### 4 - Get IP from PHPldapAdmin
-```bash
-+ docker run --name ldap-service --hostname ldap-service --detach osixia/openldap:1.1.8
-01b9973eb7bad5aa60ea0531e73530a79ed82d7b6543ec5318cda51c829e97e4
-+ docker run --name phpldapadmin-service --hostname phpldapadmin-service --link ldap-service:ldap-host --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host --detach osixia/phpldapadmin:0.7.2
-74f60c540b4889f44ee199c0bae407ceb951907059530f1676dfc35fc2291ec6
-++ docker inspect -f '{{ .NetworkSettings.IPAddress }}' phpldapadmin-service
-+ PHPLDAP_IP=172.17.0.3
-+ echo 'Go to: https://172.17.0.3'
-Go to: https://172.17.0.3
-+ echo 'Login DN: cn=admin,dc=example,dc=org'
-Login DN: cn=admin,dc=example,dc=org
-+ echo 'Password: admin'
-Password: admin
-```
 
-### 5 - Go to PHPldapAdmin
-  ![screenshot from 2019-01-06 12-35-48](https://user-images.githubusercontent.com/12220181/50763854-280eee80-1258-11e9-9cc6-6696bda5fb24.png)
-  
-    url: https://172.17.0.3
-    login: cn=admin,dc=example,dc=org
-    password: admin
+Create country template from ou template.
 
-### 6 - Get IP from OpenLDAP
-```bash
-docker inspect -f '{{ .NetworkSettings.IPAddress }}' ldap-service
-127.17.0.3
+cd /var/www/phpldapadmin/templates/creation
+
+cp ou.xml country.xml
+
+cat country.xml
 ```
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE template SYSTEM "template.dtd">
+
+<template>
+<askcontainer>1</askcontainer>
+<description>New Organisational Unit</description>
+<icon>ldap-ou.png</icon>
+<invalid>0</invalid>
+<rdn>ou</rdn>
+<!-- <regexp>^o=.*,</regexp> -->
+<title>Generic: Organisational Unit</title>
+<visible>1</visible>
+
+<objectClasses>
+<objectClass id="organizationalUnit"></objectClass>
+</objectClasses>
+
+<attributes>
+<attribute id="ou">
+	<display>Organisational Unit</display>
+	<hint>don't include "ou="</hint>
+	<order>1</order>
+	<page>1</page>
+</attribute>
+</attributes>
+
+</template>
+```
+============================
+Change to match templates/create/country.xml in this project.
+
+```
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE template SYSTEM "template.dtd">
+
+<template>
+<askcontainer>1</askcontainer>
+<description>New Country Object Class</description>
+<icon>ldap-ou.png</icon>
+<invalid>0</invalid>
+<rdn>c</rdn>
+<!-- <regexp>^o=.*,</regexp> -->
+<title>Generic: country</title>
+<visible>1</visible>
+
+<objectClasses>
+<objectClass id="country"></objectClass>
+</objectClasses>
+
+<attributes>
+<attribute id="c">
+	<display>country</display>
+	<hint>don't include "c="</hint>
+	<order>1</order>
+	<page>1</page>
+</attribute>
+</attributes>
+
+</template>
+```
+chmod 777 country.xml
+
+Add organization template the same way we added country template.
+
+cd /var/www/phpldapadmin/templates/creation
+
+cp ou.xml o.xml
+
+etc.
+
+
+
+
+
+
+root@phpldapadmin-service:/var/www/phpldapadmin/templates/creation#
+
 
 ### 7 - Create Django project and install libs
 ```bash

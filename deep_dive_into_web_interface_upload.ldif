@@ -1,0 +1,7 @@
+dn: ou=group,o=yyy,c=uk,dc=example,dc=org
+ou: group
+objectclass: organizationalUnit
+
+dn: ou=group,o=xxx,c=us,dc=example,dc=org
+ou: group
+objectclass: organizationalUnit

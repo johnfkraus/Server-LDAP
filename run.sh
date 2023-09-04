@@ -1,8 +1,11 @@
 #!/bin/bash -e
+
+# Refer to:
+# https://github.com/osixia/docker-openldap
 # https://github.com/osixia/docker-phpLDAPadmin
 
-docker run \
-    --env LDAP_ORGANISATION="My company" \
+docker run -p 389:389 -p 636:636 \
+    --env LDAP_ORGANISATION="John's LDAP Org" \
 	--env LDAP_DOMAIN="example.org" \
 	--env LDAP_ADMIN_PASSWORD="password" \
     --name ldap-service \
@@ -14,8 +17,9 @@ docker run -p 6443:443 \
     --hostname phpldapadmin-service \
     --link ldap-service:ldap-host \
     --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host \
-    --volume /Users/john.kraus/workspaces/ldap-projects/Server-LDAP/data/config-auto.php:/container/service/phpldapadmin/assets/config/config.php \
-    --detach osixia/phpldapadmin:0.9.0 --copy-service
+    --volume /Users/john.kraus/workspaces/ldap-projects/Server-LDAP/data/config.php:/container/service/phpldapadmin/assets/config/config.php \
+    --detach osixia/phpldapadmin:0.9.0 --copy-service \
+    --loglevel debug
 
 
 #     --volume /Users/john.kraus/workspaces/ldap-projects/Server-LDAP/data/my-config.php:/container/service/phpldapadmin/assets/config/config.php \

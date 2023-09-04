@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE template SYSTEM "template.dtd">
+
+<template>
+<askcontainer>1</askcontainer>
+<description>New Country Object Class</description>
+<icon>ldap-ou.png</icon>
+<invalid>0</invalid>
+<rdn>c</rdn>
+<!-- <regexp>^o=.*,</regexp> -->
+<title>Generic: country</title>
+<visible>1</visible>
+
+<objectClasses>
+<objectClass id="country"></objectClass>
+</objectClasses>
+
+<attributes>
+<attribute id="c">
+	<display>country</display>
+	<hint>don't include "c="</hint>
+	<order>1</order>
+	<page>1</page>
+</attribute>
+</attributes>
+
+</template>
