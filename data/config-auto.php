@@ -71,6 +71,7 @@ $servers->setValue('server', 'host', 'ldap-host');
 
 $servers->setValue('login', 'auth_type', 'session');
 $servers->setValue('login','bind_id','cn=admin,dc=example,dc=org');
+
 # $servers->setValue('login', 'bind_id', 'cn=admin,dc=297e090ecf1c,dc=mylabserver,dc=com');
 
 $servers->setValue('login', 'bind_pass','password');
